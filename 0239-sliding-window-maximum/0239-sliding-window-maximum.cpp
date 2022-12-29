@@ -2,26 +2,23 @@ class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         int n=nums.size();
-        
-        multiset<int> st;
-        for(int i=0; i<k; i++)
-        {
-            st.insert(nums[i]);
-        }  
-        
-        vector<int> res;        
-        
-        int i=0,j=k;        
+        vector<int> res;
+        map<int,int,greater<int>> freq;
+        int i=0,j=0;
         while(j<n)
         {
-            int currNum=*(st.rbegin());
-            cout<<currNum<<" ";
-            res.push_back(currNum);
-            auto it=st.find(nums[i++]);
-            st.erase(it);
-            st.insert(nums[j++]);
+            freq[nums[j]]++;
+            if((j-i+1) == k)
+            {
+                res.push_back(freq.begin()->first);
+                if(freq[nums[i]] > 1)
+                    freq[nums[i]]--;
+                else
+                    freq.erase(nums[i]);
+                i++;
+            }
+            j++;
         }
-        res.push_back(*(st.rbegin()));
         return res;
     }
 };
