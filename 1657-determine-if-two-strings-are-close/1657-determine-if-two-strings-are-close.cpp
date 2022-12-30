@@ -1,40 +1,24 @@
 class Solution {
 public:
     bool closeStrings(string word1, string word2) {
-        if(word1.size() != word2.size())
-            return false;
         
-        map<char,int> freq1,freq2;
-        
-        for(char ch : word1) freq1[ch]++;
-        for(char ch : word2) freq2[ch]++;
+        vector<int> w1(26,0),w2(26,0),w3(26,0),w4(26,0);
         
         for(char ch : word1)
         {
-            if(freq2.find(ch) == freq2.end())
-                return false;
+            w1[ch-'a']++;
+            w3[ch-'a']=1;
         }
         
         for(char ch : word2)
         {
-            if(freq1.find(ch) == freq1.end())
-                return false;
-        }
-                
-        vector<int> fArray1,fArray2;
-        
-        for(auto& data : freq1) fArray1.push_back(data.second);
-        for(auto& data : freq2) fArray2.push_back(data.second);
-        
-        sort(fArray1.begin(),fArray1.end());
-        sort(fArray2.begin(),fArray2.end());
-               
-        for(int i=0; i<fArray1.size(); i++)
-        {
-            if(fArray1[i] != fArray2[i])
-                return false;
+            w2[ch-'a']++;
+            w4[ch-'a']=1;
         }
         
-        return true;
+        sort(w1.begin(),w1.end());
+        sort(w2.begin(),w2.end());
+        
+        return w1 == w2 && w3 == w4;
     }
 };
