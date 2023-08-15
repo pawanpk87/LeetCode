@@ -31,9 +31,7 @@ public:
             currNode = currNode->next;
         }
         
-        if(prevNode){
-            prevNode->next = newList->next;
-        }
+        prevNode->next = newList->next;
         
         return newFinalList->next;
     }
