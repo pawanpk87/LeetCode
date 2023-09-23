@@ -79,11 +79,11 @@ class MinHeap{
         int leftChildIndex = getLeftChildIndex(index);
         int rightChildIndex = getRightChildIndex(index);
 
-        if(leftChildIndex < size && heap.get(leftChildIndex) <= heap.get(maxIndex)){
+        if(leftChildIndex < size && heap.get(leftChildIndex) < heap.get(maxIndex)){
             maxIndex = leftChildIndex;
         }
 
-        if(rightChildIndex < size && heap.get(rightChildIndex) <= heap.get(maxIndex)){
+        if(rightChildIndex < size && heap.get(rightChildIndex) < heap.get(maxIndex)){
             maxIndex = rightChildIndex;
         }
 
