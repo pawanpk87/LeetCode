@@ -52,11 +52,7 @@ class Solution {
         
         boolean visited[] = new boolean[V];
         
-        for(int i = 0; i < V; i++){
-            if(visited[i] == false){
-                dfs(i, adj, visited, result);
-            }
-        }
+        dfs(0, adj, visited, result);
         
         return result;
     }
