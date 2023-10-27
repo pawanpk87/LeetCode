@@ -51,44 +51,53 @@ class DriverClass
 }
 // } Driver Code Ends
 
-class Solution{
-    static int findNode(boolean sptSet[], int dist[], int V){
-        int minIndex = -1;
-        for(int i = 0; i < V; i++){
-            if(sptSet[i] == false){
-                if(minIndex == -1){
-                    minIndex = i;
-                }  
-                else if(dist[i] < dist[minIndex]){
-                    minIndex = i;
-                }
-            }
-        }
-        return minIndex;
+class Node implements Comparable<Node>{
+    int node;
+    int cost;
+    
+    public Node(){
+        
     }
     
+    public Node(int node, int cost){
+        this.node = node;
+        this.cost = cost;
+    }
+    
+    @Override
+    public int compareTo(Node otherNode){
+        if(this.cost < otherNode.cost)
+            return -1;
+        if(this.cost > otherNode.cost)
+            return 1;
+        return 0;
+    }
+}
+
+class Solution{
     static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S){
-        boolean sptSet[] = new boolean[V];
-        int dist[] = new int[V];
-        
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        
-        dist[S] = 0;
-        
-        for(int i = 0; i < V-1; i++){
-            int u = findNode(sptSet, dist, V);
-            sptSet[u] = true;
-            ArrayList<ArrayList<Integer>> adjNodes = adj.get(u);
-            for(ArrayList<Integer> adjNode : adjNodes){
-                int v = adjNode.get(0);
-                int wt = adjNode.get(1);
-                if(dist[u]+wt < dist[v]){
-                    dist[v] = dist[u]+wt;
-                }
-            }
-        }
-        
-        return dist;
+        PriorityQueue<Node> minHeap = new PriorityQueue<>();
+		
+		int dist[] = new int[V];
+		Arrays.fill(dist, Integer.MAX_VALUE);
+		
+		minHeap.add(new Node(S, 0));
+		dist[S] = 0;
+		
+		while(minHeap.size() > 0){
+		    Node currNode = minHeap.poll();
+		    int u = currNode.node;
+		    for(ArrayList<Integer> adjNode : adj.get(u)){
+		        int v = adjNode.get(0);
+		        int wt = adjNode.get(1);
+		        if((dist[u]+wt) < dist[v]){
+		            dist[v] = dist[u] + wt;
+		            minHeap.add(new Node(v, dist[v]));
+		        } 
+		    }
+		}
+		
+		return dist;
     }
 }
 
