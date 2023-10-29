@@ -22,14 +22,11 @@ class GFG {
 
 // User function Template for Java
 class Solution {
-    static int setBits(int N) {
+    static int setBits(int n) {
         int count = 0;
-        while(N > 0){
-            int result = N & 1;
-            if(result != 0){
-                count++;
-            }
-            N >>= 1;
+        while(n > 0){
+            n &= (n-1);
+            count++;
         }
         return count;
     }
