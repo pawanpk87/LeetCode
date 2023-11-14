@@ -30,95 +30,86 @@ public class Main{
 }
 // } Driver Code Ends
 
-class DisjointSet{
-    private int parent[];
-    private int rank[];
-    
-    public DisjointSet(int n){
-        parent = new int[n+1];
-        rank = new int[n+1];
-        for(int i = 0; i < n; i++){
-            parent[i] = i;
-            rank[i] = 1;
-        }
-    }
-    
-    public int find(int node){
-        if(node == parent[node]){
-            return node;
-        }
-        return parent[node] = find(parent[node]);
-    }
-    
-    public boolean union(int node1, int node2){
-        int node1Parent = find(node1);
-        int node2Parent = find(node2);
-        
-        if(node1Parent == node2Parent)
-            return true;
-        
-        if(rank[node1Parent] < rank[node2Parent]){
-            parent[node1Parent] = node2Parent;
-        }else if(rank[node1Parent] > rank[node2Parent]){
-            parent[node2Parent] = node1Parent;
-        }else{
-            parent[node1Parent] = node2Parent;
-            rank[node2Parent]++;
-        }
-        
-        return false;
-    }
-}
-
-class Edge implements Comparable<Edge>{
-    public int src;
-    public int dest;
+class Edge{
+    public int node;
     public int wt;
     
-    public Edge(int src, int dest, int wt){
-        this.src = src;
-        this.dest = dest;
+    public Edge(int node, int wt){
+        this.node = node;
         this.wt = wt;
-    }
-    
-    public int compareTo(Edge other){
-        return this.wt - other.wt;
     }
 }
 
 class Solution{
-	static int spanningTree(int V, int E, int edges_[][]){
-	    ArrayList<Edge> edges = new ArrayList<>();
+    static int findMinSpanningTree(int V, ArrayList<ArrayList<Edge>> adjList){
+        PriorityQueue<Edge> minHeap = new PriorityQueue<>(new Comparator<Edge>(){
+	        public int compare(Edge edge1, Edge edge2){
+	            return edge1.wt - edge2.wt;
+	        }
+	    });
 	    
-	    int src = 0, dest = 0, wt = 0;
-	    for(int i = 0; i < E; i++){
-	        src = edges_[i][0];
-	        dest = edges_[i][1];
-	        wt = edges_[i][2];
-	        
-	        edges.add(new Edge(src, dest, wt));
+	    boolean mstSet[] = new boolean[V];
+	    int values[] = new int[V];
+	    int parent[] = new int[V];
+	    
+	    for(int i = 0; i < V; i++){
+	        values[i] = Integer.MAX_VALUE;
+	        parent[i] = -1;
+	        mstSet[i] = false;
 	    }
 	    
-	    Collections.sort(edges);
+	    int src = 0;
+	    values[src] = 0;
 	    
-	    DisjointSet dsu = new DisjointSet(V);
-	    int ans = 0;
-	    int noOfEdge = 0;
-	    int index = 0;
+	    minHeap.offer(new Edge(src, 0));
 	    
-	    while(noOfEdge < (V-1) && index < edges.size()){
-	        Edge currEdge = edges.get(index++);
+	    int u, v, wt;
+	    while(!minHeap.isEmpty()){
+	        Edge currNode = minHeap.poll();
+	        u = currNode.node;
 	        
-	        src = currEdge.src;
-	        dest = currEdge.dest;
-	        wt = currEdge.wt;
+	        if(mstSet[u] == true){
+	            continue;
+	        }
+	            
+	        mstSet[u] = true;
 	        
-	        if(dsu.union(src, dest) == false){
-	            ans += wt;
-	            noOfEdge++;
+	        for(Edge adjNode : adjList.get(u)){
+	            v = adjNode.node;
+	            wt = adjNode.wt;
+	            if(mstSet[v] == false && values[v] > wt){
+	                values[v] = wt;
+	                parent[v] = u;
+	                minHeap.offer(new Edge(v, wt));
+	            }
 	        }
 	    }
-	   
-	    return ans;
+	    
+	    int minCost = 0;
+	    for(int i = 1; i < V; i++){
+	        //System.out.println(parent[i] + " - "+i+" -> "+values[i]);
+	        minCost += values[i];
+	    }
+	    
+	    return minCost;
+    }
+    
+	static int spanningTree(int V, int E, int edges[][]){
+	    ArrayList<ArrayList<Edge>> adjList = new ArrayList<ArrayList<Edge>>();
+	    for(int i = 0; i < V; i++){
+	        adjList.add(new ArrayList<Edge>());
+	    }
+	    
+	    int src, dest, wt;
+	    for(int i = 0; i < E; i++){
+	        src = edges[i][0];
+	        dest = edges[i][1];
+	        wt = edges[i][2];
+	        adjList.get(src).add(new Edge(dest, wt));
+	        adjList.get(dest).add(new Edge(src, wt));
+	    }
+	    
+	    return findMinSpanningTree(V, adjList);
 	}
 }
+
