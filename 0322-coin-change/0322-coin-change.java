@@ -1,39 +1,28 @@
 class Solution {
-    private int memo[][];
-    
-    private int solve(int currIndex, int amount, int coins[], int n){
-        if(amount == 0){
-            return 0;
-        }    
-        
-        if(currIndex == n){
-            return Integer.MAX_VALUE;
-        }
-        
-        if(memo[currIndex][amount] != -1){
-            return memo[currIndex][amount];
-        }
-        
-        if(coins[currIndex] <= amount){
-            int opt1 = solve(currIndex, amount - coins[currIndex], coins, n);
-            int opt2 = solve(currIndex + 1, amount, coins, n);
-            return memo[currIndex][amount] = Math.min(opt1 == Integer.MAX_VALUE ? opt1 : 1 + opt1, opt2);
-        }else{
-            int opt1 = solve(currIndex + 1, amount, coins, n);
-            return memo[currIndex][amount] = opt1;
-        }
-    }
-    
     public int coinChange(int[] coins, int amount) {
         int n = coins.length;
         
-        memo = new int[n+1][amount+1];
+        int dp[][] = new int[n+1][amount+1];
+        
         for(int i = 0; i <= n; i++){
-            Arrays.fill(memo[i], -1);
+            dp[i][0] = 0;
+        }
+        for(int j = 1; j <= amount; j++){
+            dp[0][j] = Integer.MAX_VALUE;
         }
         
-        int ans = solve(0, amount, coins, n);
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= amount; j++){
+                if(coins[i-1] <= j){
+                    int opt1 = dp[i][j - coins[i-1]];
+                    int opt2 = dp[i-1][j];
+                    dp[i][j] = Math.min(opt1 == Integer.MAX_VALUE ? opt1 : 1 + opt1, opt2);
+                }else{
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
         
-        return ans == Integer.MAX_VALUE ? -1 : ans;
+        return dp[n][amount] == Integer.MAX_VALUE ? -1 : dp[n][amount];
     }
 }
