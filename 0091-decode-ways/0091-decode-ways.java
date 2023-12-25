@@ -1,38 +1,40 @@
 class Solution {
-    int memo[];
-    
-    private int solve(String s, int n){
-        if(n == 0 || n == 1){
-            return 1;
-        }
-        
-        if(memo[n] != -1){
-            return memo[n];
-        }
-        
-        int opt1 = 0, opt2 = 0;
-        
-        if(s.charAt(n-1) > '0'){
-            opt1 = solve(s, n-1);
-        }
-        
-        if(s.charAt(n-2) == '1' || (s.charAt(n-2) == '2' && s.charAt(n-1) < '7')){
-            opt2 = solve(s, n-2);
-        }
-        
-        return memo[n] = (opt1 + opt2);
-    }
-    
     public int numDecodings(String s) {
         int n = s.length();
-        
-        memo = new int[n+1];
-        Arrays.fill(memo, -1);
         
         if(n == 0 || s.charAt(0) == '0'){
             return 0;
         }
         
-        return solve(s, n);
+        int dp[] = new int[n+1];
+        
+        dp[0] = 1; // number of ways to decode empty string
+        dp[1] = 1; // number of ways to decode string of length 1
+        
+        for(int i = 2; i <= n; i++){
+            if(s.charAt(i-1) > '0'){
+                dp[i] += dp[i-1];
+            }   
+            
+            if(s.charAt(i-2) == '1' || (s.charAt(i-2) == '2' && s.charAt(i-1) < '7')){
+                dp[i] += dp[i-2];    
+            }
+            
+            /*
+                dp[i] = number of ways to decode string of length i
+                
+                if(s.charAt(i-1) > '0'){
+                    // if current character is valid then call for the i-1 length string
+                    dp[i] += dp[i-1];
+                }
+                
+                if(s.charAt(i-2) == '1' || (s.charAt(i-2) == '2' && s.charAt(i-1) > '7')){
+                    // if the current 2 characters is valid then call for the i-2 lenght string
+                    dp[i] += dp[i-2];    
+                }
+            */
+        }
+        
+        return dp[n];
     }
 }
