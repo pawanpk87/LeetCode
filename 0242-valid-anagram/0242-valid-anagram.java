@@ -1,11 +1,32 @@
 class Solution {
     public boolean isAnagram(String s, String t) {
-        int alphabet[] = new int[26];
-        for(int i = 0; i < s.length(); i++) alphabet[s.charAt(i) - 'a']++;
-        for(int i = 0; i < t.length(); i++) alphabet[t.charAt(i) - 'a']--;
-        for(int i = 0; i < 26; i++){
-            if(alphabet[i] != 0) return false;
+        int n = s.length(), m = t.length();
+        
+        if(n != m){
+            return false;
         }
-        return true;
+        
+        Map<Character, Integer> freq = new HashMap<>();
+        
+        for(int i = 0; i < n; i++){
+            char ch = s.charAt(i);
+            freq.put(ch, freq.getOrDefault(ch, 0) + 1);
+        }
+        
+        for(int i = 0; i < m; i++){
+            char ch = t.charAt(i);
+            if(freq.containsKey(ch)){
+                int f = freq.get(ch) - 1;
+                if(f == 0){
+                    freq.remove(ch);
+                } else{
+                    freq.put(ch, f);
+                }
+            } else{
+                return false;
+            }
+        }
+        
+        return freq.size() == 0;
     }
 }
