@@ -47,29 +47,38 @@ class gfg
 
 
 class Solution { 
-    static int[][] memo;
+    // static int[][] memo;
     
-    static int solve(int index, int W, int[] wt, int[] val) {
-        if(index == wt.length) {
-            return 0;
-        }
+    // static int solve(int index, int W, int[] wt, int[] val) {
+    //     if(index == wt.length) {
+    //         return 0;
+    //     }
         
-        if(memo[index][W] != -1){
-           return memo[index][W]; 
-        }
-        int pos1 = 0, pos2 = 0;
+    //     if(memo[index][W] != -1){
+    //       return memo[index][W]; 
+    //     }
+    //     int pos1 = 0, pos2 = 0;
         
-        if(wt[index] <= W) {
-            pos1 = val[index] + solve(index + 1, W-wt[index], wt, val);
-        } 
+    //     if(wt[index] <= W) {
+    //         pos1 = val[index] + solve(index + 1, W-wt[index], wt, val);
+    //     } 
         
-        pos2 = solve(index + 1, W, wt, val);   
+    //     pos2 = solve(index + 1, W, wt, val);   
         
-        return memo[index][W] = Math.max(pos1, pos2);
-    }
+    //     return memo[index][W] = Math.max(pos1, pos2);
+    // }
     
     static int knapSack(int W, int wt[], int val[], int n) { 
-        int[][] dp = new int
+        int[][] dp = new int[n+1][W+1];
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= W; j++) {
+                if(wt[i-1] <= j) {
+                    dp[i][j] = val[i-1] + dp[i-1][j - wt[i-1]];
+                }
+                dp[i][j] = Math.max(dp[i][j], dp[i-1][j]);
+            }
+        }
+        return dp[n][W];
     } 
 }
 
