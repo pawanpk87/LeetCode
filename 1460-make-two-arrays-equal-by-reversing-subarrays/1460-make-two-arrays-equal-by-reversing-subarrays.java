@@ -14,19 +14,13 @@ class Solution {
             int prevFreq = freq.get(num);
             prevFreq--;
             
-            if(prevFreq < 0) {
-                return false;
-            }
-            
-            freq.put(num, prevFreq);
-        }
-        
-        for(Integer c : freq.values()) {
-            if(c != 0){
-                return false;
+            if(prevFreq == 0) {
+                freq.remove(num);
+            } else {
+                freq.put(num, prevFreq);
             }
         }
         
-        return true;
+        return freq.size() == 0;
     }
 }
