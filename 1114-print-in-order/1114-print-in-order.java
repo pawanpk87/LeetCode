@@ -1,31 +1,35 @@
 class Foo {
-    boolean isFirstPrinted;
-    boolean isSecondPrinted;
+    private int count;
     
     public Foo() {
-        this.isFirstPrinted = false;
-        this.isSecondPrinted = false;
+        this.count = 1;    
     }
 
-    synchronized public void first(Runnable printFirst) throws InterruptedException {
-        printFirst.run();
-        isFirstPrinted = true;
-        notifyAll();
-    }
-
-    synchronized public void second(Runnable printSecond) throws InterruptedException {
-        while(!isFirstPrinted) {
-            wait();
+    public void first(Runnable printFirst) throws InterruptedException {
+        synchronized (this) {
+            printFirst.run();
+            count++;
+            notifyAll();
         }
-        printSecond.run();
-        isSecondPrinted = true;
-        notifyAll();
     }
 
-    synchronized public void third(Runnable printThird) throws InterruptedException {
-        while(!isSecondPrinted) {
-            wait();
+    public void second(Runnable printSecond) throws InterruptedException {
+        synchronized (this) {
+            while(count < 2) {
+                wait();
+            }
+            printSecond.run();
+            count++;
+            notifyAll();
         }
-        printThird.run();
+    }
+
+    public void third(Runnable printThird) throws InterruptedException {
+        synchronized (this) {
+            while(count < 3) {
+                wait();
+            }
+            printThird.run();
+        }
     }
 }
