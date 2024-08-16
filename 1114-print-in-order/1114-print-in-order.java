@@ -1,31 +1,25 @@
 class Foo {
-    private boolean oneDone;
-    private boolean secondDone;
+    private Semaphore second;
+    private Semaphore third;
     
     public Foo() {
-        oneDone = false;
-        secondDone = false;
+        second = new Semaphore(0);
+        third = new Semaphore(0);
     }
 
-    public synchronized void first(Runnable printFirst) throws InterruptedException {
+    public void first(Runnable printFirst) throws InterruptedException {
         printFirst.run();
-        oneDone = true;
-        notifyAll();
+        second.release();
     }
 
-    public synchronized void second(Runnable printSecond) throws InterruptedException {
-        while(!oneDone) {
-            wait();
-        }
+    public void second(Runnable printSecond) throws InterruptedException {
+        second.acquire();
         printSecond.run();
-        secondDone = true;
-        notifyAll();
+        third.release();
     }
 
-    public synchronized void third(Runnable printThird) throws InterruptedException {
-        while(!secondDone) {
-            wait();
-        }
+    public void third(Runnable printThird) throws InterruptedException {
+        third.acquire();
         printThird.run();
     }
 }
