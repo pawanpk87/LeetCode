@@ -1,25 +1,31 @@
 class Foo {
-    private Semaphore second;
-    private Semaphore third;
+    boolean isFirstPrinted;
+    boolean isSecondPrinted;
     
     public Foo() {
-        second = new Semaphore(0);
-        third = new Semaphore(0);
+        this.isFirstPrinted = false;
+        this.isSecondPrinted = false;
     }
 
-    public void first(Runnable printFirst) throws InterruptedException {
+    synchronized public void first(Runnable printFirst) throws InterruptedException {
         printFirst.run();
-        second.release();
+        isFirstPrinted = true;
+        notifyAll();
     }
 
-    public void second(Runnable printSecond) throws InterruptedException {
-        second.acquire();
+    synchronized public void second(Runnable printSecond) throws InterruptedException {
+        while(!isFirstPrinted) {
+            wait();
+        }
         printSecond.run();
-        third.release();
+        isSecondPrinted = true;
+        notifyAll();
     }
 
-    public void third(Runnable printThird) throws InterruptedException {
-        third.acquire();
+    synchronized public void third(Runnable printThird) throws InterruptedException {
+        while(!isSecondPrinted) {
+            wait();
+        }
         printThird.run();
     }
 }
