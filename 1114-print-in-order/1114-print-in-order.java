@@ -1,35 +1,25 @@
 class Foo {
-    private int count;
+    CountDownLatch waitForFirst;
+    CountDownLatch waitForSecond;
     
     public Foo() {
-        this.count = 1;    
+        this.waitForFirst = new CountDownLatch(1);
+        this.waitForSecond = new CountDownLatch(1);
     }
 
     public void first(Runnable printFirst) throws InterruptedException {
-        synchronized (this) {
-            printFirst.run();
-            count++;
-            notifyAll();
-        }
+        printFirst.run();
+        waitForFirst.countDown();
     }
 
     public void second(Runnable printSecond) throws InterruptedException {
-        synchronized (this) {
-            while(count < 2) {
-                wait();
-            }
-            printSecond.run();
-            count++;
-            notifyAll();
-        }
+        waitForFirst.await();
+        printSecond.run();
+        waitForSecond.countDown();
     }
 
     public void third(Runnable printThird) throws InterruptedException {
-        synchronized (this) {
-            while(count < 3) {
-                wait();
-            }
-            printThird.run();
-        }
+        waitForSecond.await();
+        printThird.run();
     }
 }
