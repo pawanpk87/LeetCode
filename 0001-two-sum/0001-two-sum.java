@@ -9,20 +9,13 @@ class Solution {
         }
         
         for(int i = 0; i < n; i++) {
-            int targetNum = -1;
-            
-            if((nums[i] + target - nums[i]) == target) {
-                targetNum = target - nums[i];
-            } else {
-                targetNum = target + nums[i];
-            }
-            
-            if(mp.containsKey(targetNum) && 
-               mp.get(targetNum) != i) {
-                return new int[] {i, mp.get(targetNum)};
+            int rem = target - nums[i];
+            if(mp.containsKey(rem) && 
+               mp.get(rem) != i) {
+                return new int[] {i, mp.get(rem)};
             }
         }
         
-        return new int[] {-1, -1};
+        return null;
     }
 }
