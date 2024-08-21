@@ -24,46 +24,23 @@ class Main {
 
 // } Driver Code Ends
 
+
+
+
 class Solution {
-    int MOD = 1000000007;
-    int[][] memo;
-    
-    int countWaysUtil(int index, int targetSum, int[] nums) {
-        if(targetSum == 0) {
-            return 1;
-        }
-        
-        if(index == nums.length) {
-            return 0;
-        }
-        
-        if(memo[index][targetSum] != -1) {
-           return memo[index][targetSum]; 
-        }
-        
-        int pos1 = 0;
-        int pos2 = 0;
-        
-        if(nums[index] <= targetSum) {
-            pos1 = countWaysUtil(index, targetSum - nums[index], nums);
-        } 
-        
-        pos2 = countWaysUtil(index + 1, targetSum, nums);
-        
-        return memo[index][targetSum] = (pos1 + pos2) % MOD;
-    }
+    public static int MOD = 1000000007;
     
     int countWays(int n) {
-        int[] nums = new int[n];
-        for(int i = 0; i < n; i++) {
-            nums[i] = i + 1;
+        int[] dp = new int[n + 1];
+        
+        dp[0] = 1;
+        
+        for(int i = 1; i < n; i++) {
+            for(int j = i; j <= n; j++) {
+                dp[j] = (dp[j] + dp[j-i]) % MOD; 
+            }
         }
         
-        memo = new int[n][n+1];
-        for(int i = 0; i < n; i++) {
-            Arrays.fill(memo[i], -1);
-        }
-        
-        return countWaysUtil(0, n, nums) - 1;\
+        return dp[n];
     }
 }
