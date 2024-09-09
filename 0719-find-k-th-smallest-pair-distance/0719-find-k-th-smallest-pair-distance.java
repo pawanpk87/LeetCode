@@ -1,28 +1,40 @@
 class Solution {
-    public int smallestDistancePair(int[] nums, int k) {
+    private int countPairsWithDifference(int[] nums, int x) {
         int n = nums.length;
         
-        int maxElement = Integer.MIN_VALUE;
-        for(int i = 0; i < n; i++) {
-            maxElement = Math.max(maxElement, nums[i]);
-        }
-        
-        int[] bucket = new int[maxElement + 1];
+        int count = 0;
         
         for(int i = 0; i < n; i++) {
             for(int j = i + 1; j < n; j++) {
-                int diff = Math.abs(nums[i] - nums[j]);
-                bucket[diff]++;
+                if((nums[j] - nums[i]) <= x) {
+                    count++;
+                } else {
+                    break;
+                }
             }
         }
         
-        for(int i = 0; i <= maxElement; i++) {
-            k -= bucket[i];
-            if(k <= 0) {
-                return i;
+        return count;
+    }
+    
+    
+    public int smallestDistancePair(int[] nums, int k) {
+        Arrays.sort(nums);
+        
+        int low = 0, high = nums[nums.length - 1];
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            
+            int countPairs = countPairsWithDifference(nums, mid);
+            
+            if(countPairs < k) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
         
-        return -1;
+        return low;
     }
 }
