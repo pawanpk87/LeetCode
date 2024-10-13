@@ -1,36 +1,34 @@
 class Solution {
     public int[] smallestRange(List<List<Integer>> nums) {
-        int k = nums.size();
-        
-        int[] indices = new int[k];
-        
-        int[] range = new int[] {0, Integer.MAX_VALUE};
-        
-        while(true) {
-            int minNum = Integer.MAX_VALUE;
-            int maxNum = Integer.MIN_VALUE;
-            int minNumIndex = 0;
-    
-            for(int i = 0; i < k; i++) {
-                int currNum = nums.get(i).get(indices[i]);
-                
-                if(minNum > currNum) {
-                    minNum = currNum;
-                    minNumIndex = i;
-                }
-                
-                if(maxNum < currNum) {
-                    maxNum = currNum;
-                }
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>(new Comparator<int[]>(){
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
             }
+        });
+        
+        int maxValue = Integer.MIN_VALUE;
+        int[] range = new int[]{0, Integer.MAX_VALUE};
+        
+        for(int i = 0; i < nums.size(); i++) {
+            minHeap.add(new int[]{nums.get(i).get(0), i, 0});
+            maxValue = Math.max(maxValue, nums.get(i).get(0));
+        }
+        
+        while(minHeap.size() == nums.size()) {
+            int[] data = minHeap.poll();
             
-            if((maxNum - minNum) < (range[1] - range[0])) {
+            int minNum = data[0];
+            int kIndex = data[1];
+            int numIndex = data[2];
+            
+            if((maxValue - minNum) < (range[1] - range[0])) {
                 range[0] = minNum;
-                range[1] = maxNum;
+                range[1] = maxValue;
             }
             
-            if(++indices[minNumIndex] == nums.get(minNumIndex).size()) {
-                break;
+            if(numIndex + 1 < nums.get(kIndex).size()) {
+                minHeap.add(new int[]{nums.get(kIndex).get(numIndex + 1), kIndex, numIndex + 1});
+                maxValue = Math.max(maxValue, nums.get(kIndex).get(numIndex + 1));
             }
         }
         
