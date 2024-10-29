@@ -1,42 +1,35 @@
 class Solution {
-    private int[][] memo;
-    
     int[] nr = new int[]{-1, 0, 1};
     int[] nc = new int[]{1, 1, 1};
-        
-    private int calMaxLen(int row, int col, int[][] grid, int rows, int cols) {
-        if(memo[row][col] != -1) {
-            return memo[row][col];
-        }
-        
-        int maxLen = 0;
-        
-        int nrow, ncol;
-        for(int k = 0; k < 3; k++) {
-            nrow = row + nr[k];
-            ncol = col + nc[k];
-            if(isValidMove(nrow, ncol, rows, cols) && 
-               grid[row][col] < grid[nrow][ncol]) {
-                maxLen = Math.max(maxLen, 1 + calMaxLen(nrow, ncol, grid, rows, cols));
-            }
-        }
-        
-        return memo[row][col] = maxLen;
-    }
     
     public int maxMoves(int[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
         
-        memo = new int[n][m];
-        for(int i = 0; i < n; i++) {
-            Arrays.fill(memo[i], -1);
+        int[][] dp = new int[n][m];
+        
+        
+        for(int col = m-2; col >= 0; col--) {
+            for(int row = 0; row < n; row++) {
+                int maxLen = 0;
+
+                int nrow, ncol;
+                for(int k = 0; k < 3; k++) {
+                    nrow = row + nr[k];
+                    ncol = col + nc[k];
+                    if(isValidMove(nrow, ncol, n, m) && 
+                       grid[row][col] < grid[nrow][ncol]) {
+                        maxLen = Math.max(maxLen, 1 + dp[nrow][ncol]);
+                    }
+                }
+
+                dp[row][col] = maxLen;
+            }
         }
         
         int maxLen = 0;
-        
         for(int i = 0; i < n; i++) {
-            maxLen = Math.max(maxLen, calMaxLen(i, 0, grid, n, m));
+            maxLen = Math.max(maxLen, dp[i][0]);
         }
         
         return maxLen;
