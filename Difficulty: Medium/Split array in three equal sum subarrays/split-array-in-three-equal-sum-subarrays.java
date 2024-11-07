@@ -51,50 +51,34 @@ class Solution {
     public List<Integer> findSplit(int[] arr) {
         int n = arr.length;
         
-        long[] suffSum = new long[n];
+        long totalSum = 0;
         
-        for(int i = n - 1; i >= 0; i--) {
-            if(i == n-1) {
-                suffSum[i] = arr[i];
-            } else {
-                suffSum[i] = suffSum[i + 1] + arr[i];
-            }
+        for(int num : arr) {
+            totalSum += num;
         }
         
-        long firstPartSum = 0;
+        if(totalSum % 3 != 0) {
+            return Arrays.asList(-1, -1);
+        }
         
-        for(int i = 0; i < n - 2; i++) {
-            firstPartSum = firstPartSum + arr[i];
+        List<Integer> resIndex = new ArrayList<>();
+        
+        long eachPartSum = totalSum / 3;
+        long currPartSum = 0;
+        
+        for(int i = 0; i < n; i++) {
+            currPartSum += arr[i];
             
-            if((firstPartSum * 2) == suffSum[i + 1]) {
-                long secondPartSum = firstPartSum;
+            if(currPartSum == eachPartSum) {
+                currPartSum = 0;
+                resIndex.add(i);
                 
-                int index = findSum(secondPartSum, suffSum, i + 1, n - 1);
-                
-                if(index != -1) {
-                    return Arrays.asList(i, index - 1);
+                if(resIndex.size() == 2 && i < n-1) {
+                    return resIndex;
                 }
             }
         }
         
         return Arrays.asList(-1, -1);
-    }
-    
-    private int findSum(long targetSum, long[] arr, int l, int r) {
-        int resIndex = -1;
-        
-        while(l <= r) {
-            int mid = (l + r) / 2;
-            
-            if(arr[mid] > targetSum) {
-                l = mid + 1;
-            } else if (arr[mid] < targetSum ) {
-                r = mid - 1;
-            } else {
-                return mid;
-            }
-        }
-        
-        return resIndex;
     }
 }
