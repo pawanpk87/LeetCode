@@ -38,12 +38,9 @@ class Main {
 
 // User function Template for Java
 class Solution {
-
-    // arr: input array
-    // Function to find the sum of contiguous subarray with maximum sum.
-    long maxSubarraySum(int[] arr) {
-        long max_sum_so_far = Integer.MIN_VALUE;
-        long sum_so_far = 0;
+    int maxSubarraySum(int[] arr) {
+        int max_sum_so_far = Integer.MIN_VALUE;
+        int sum_so_far = 0;
         for(int num : arr) {
             sum_so_far += num;
             
