@@ -1,41 +1,35 @@
 class Solution {
-    private int solve(int index, int[] nums, int target) {
+    private int totalSum;
+    private int[][] memo;
+    
+    private int solve(int index, int currSum, int[] nums, int target) {
         if(index == nums.length) {
-            return target == 0 ? 1 : 0;
+            return currSum == target ? 1 : 0;
         }
         
-        int opt1 = solve(index + 1, nums, target + nums[index]);
-        int opt2 = solve(index + 1, nums, target - nums[index]);
+        if(memo[index][totalSum + currSum] != Integer.MIN_VALUE) {
+            return memo[index][totalSum + currSum];
+        }
         
-        return opt1 + opt2;
+        int add = solve(index + 1, currSum + nums[index], nums, target);
+        int subtract = solve(index + 1, currSum - nums[index], nums, target);
+        
+        return memo[index][totalSum + currSum] = add + subtract;
     }
     
     public int findTargetSumWays(int[] nums, int target) {
-        return solve(0, nums, target);
+        int n = nums.length;
+        
+        totalSum = 0;
+        for(int num : nums) {
+            totalSum += num;
+        }
+        
+        memo = new int[n][2 * totalSum + 1];
+        for(int i = 0; i < n; i++) {
+            Arrays.fill(memo[i], Integer.MIN_VALUE);
+        }
+        
+        return solve(0, 0, nums, target);
     }
 }
-/*
-    
-    nums = [1,1,1,1,1], target = 3
-    
-    -1 + 1 + 1 + 1 + 1 = 3
-    
-    
-    1.) adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
-    
-    
-    
-    
-        [1,1,1,1,1]
-         |
-        / \
-      +     -
-            
-     target = 4     target = 2
-     1,1,1,1]       1,1,1,1]
-     |              |
-    / \            / \
-   +   -          +   -
- 
-
-*/
