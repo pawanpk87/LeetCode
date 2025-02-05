@@ -1,37 +1,27 @@
 class Solution {
-    public static int ALPHABET_SIZE = 26;
-
     public boolean areAlmostEqual(String s1, String s2) {
         int n = s1.length();
-
+        
+        int firstIndex = 0, secondIndex = 0;
         int diffChars = 0;
-
+        
         for(int i = 0; i < n; i++) {
             if(s1.charAt(i) != s2.charAt(i)) {
                 diffChars++;
+                
+                if(diffChars > 2) {
+                    return false;
+                } else if(diffChars == 1) {
+                    firstIndex = i;
+                } else {
+                    secondIndex = i;
+                }
             }
         }
-
-        return diffChars <= 2 && haveSameFrequency(s1, s2);
-    }
-
-    private boolean haveSameFrequency(String s1, String s2) {
-        int[] freq = new int[ALPHABET_SIZE];
-
-        for(char ch : s1.toCharArray()) {
-            freq[ch - 'a']++;
-        }
-
-        for(char ch : s2.toCharArray()) {
-            freq[ch - 'a']--;
-        }
-
-        for(int i = 0; i < ALPHABET_SIZE; i++) {
-            if(freq[i] != 0) {
-                return false;
-            }
-        }
-
-        return true;
+        
+        return (
+            s1.charAt(firstIndex) == s2.charAt(secondIndex) &&
+            s1.charAt(secondIndex) == s2.charAt(firstIndex)
+        );
     }
 }
