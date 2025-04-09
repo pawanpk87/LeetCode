@@ -9,6 +9,7 @@ GFG: https://www.geeksforgeeks.org/user/?/
 ## Array
 |  |
 | ------- |
+| [0878-shifting-letters](https://github.com/pawanpk87/LeetCode/tree/master/0878-shifting-letters) |
 | [2160-minimum-operations-to-make-a-uni-value-grid](https://github.com/pawanpk87/LeetCode/tree/master/2160-minimum-operations-to-make-a-uni-value-grid) |
 | [3154-maximum-value-of-an-ordered-triplet-i](https://github.com/pawanpk87/LeetCode/tree/master/3154-maximum-value-of-an-ordered-triplet-i) |
 | [3656-minimum-number-of-operations-to-make-elements-in-array-distinct](https://github.com/pawanpk87/LeetCode/tree/master/3656-minimum-number-of-operations-to-make-elements-in-array-distinct) |
@@ -45,4 +46,12 @@ GFG: https://www.geeksforgeeks.org/user/?/
 |  |
 | ------- |
 | [1218-lowest-common-ancestor-of-deepest-leaves](https://github.com/pawanpk87/LeetCode/tree/master/1218-lowest-common-ancestor-of-deepest-leaves) |
+## String
+|  |
+| ------- |
+| [0878-shifting-letters](https://github.com/pawanpk87/LeetCode/tree/master/0878-shifting-letters) |
+## Prefix Sum
+|  |
+| ------- |
+| [0878-shifting-letters](https://github.com/pawanpk87/LeetCode/tree/master/0878-shifting-letters) |
 <!---LeetCode Topics End-->
