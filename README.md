@@ -11,6 +11,7 @@ GFG: https://www.geeksforgeeks.org/user/?/
 | ------- |
 | [0878-shifting-letters](https://github.com/pawanpk87/LeetCode/tree/master/0878-shifting-letters) |
 | [1421-find-numbers-with-even-number-of-digits](https://github.com/pawanpk87/LeetCode/tree/master/1421-find-numbers-with-even-number-of-digits) |
+| [2144-maximum-difference-between-increasing-elements](https://github.com/pawanpk87/LeetCode/tree/master/2144-maximum-difference-between-increasing-elements) |
 | [2160-minimum-operations-to-make-a-uni-value-grid](https://github.com/pawanpk87/LeetCode/tree/master/2160-minimum-operations-to-make-a-uni-value-grid) |
 | [3154-maximum-value-of-an-ordered-triplet-i](https://github.com/pawanpk87/LeetCode/tree/master/3154-maximum-value-of-an-ordered-triplet-i) |
 | [3656-minimum-number-of-operations-to-make-elements-in-array-distinct](https://github.com/pawanpk87/LeetCode/tree/master/3656-minimum-number-of-operations-to-make-elements-in-array-distinct) |
